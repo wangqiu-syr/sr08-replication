@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Matching with local and non-local control groups: An R rebuild of Stuart and Rubin’s (2008) simulation"
+version: 1.0.0
+date-released: 2026-11-11
+license: MIT
+authors:
+  - family-names: Wang
+    given-names: Qiu
+    affiliation: Syracuse University
+references:
+  - type: article
+    title: "Matching with multiple control groups with adjustment for group differences"
+    authors:
+      - family-names: Stuart
+        given-names: Elizabeth A.
+      - family-names: Rubin
+        given-names: Donald B.
+    journal: "Journal of Educational and Behavioral Statistics"
+    volume: 33
+    issue: 3
+    start: 279
+    end: 306
+    year: 2008
+    doi: 10.3102/1076998607306078

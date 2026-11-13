@@ -2,6 +2,8 @@
 
 Qiu Wang, Syracuse University · v1.0 · November 2026
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24186061.svg)](https://doi.org/10.5281/zenodo.24186061)
+
 ## Key findings
 
 Stuart and Rubin (2008) proposed matching treated units first to a local control group and then, for units with no close local match, to a non-local group, with an adjustment for the difference between the two control groups.
@@ -129,7 +131,7 @@ Code, documentation and analyses were developed with Claude (Anthropic) as a cod
 
 ## How to cite
 
-Wang, Q. (2026). *Matching with local and non-local control groups: An R rebuild of Stuart and Rubin’s (2008) simulation* (Version 1.0) [Computer software]. Zenodo. https://doi.org/[DOI after release]
+Wang, Q. (2026). *Matching with local and non-local control groups: An R rebuild of Stuart and Rubin’s (2008) simulation* (Version 1.0) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.24186061
 
 ## License
 

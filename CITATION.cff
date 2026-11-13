@@ -3,6 +3,7 @@ message: "If you use this software, please cite it as below."
 title: "Matching with local and non-local control groups: An R rebuild of Stuart and Rubin’s (2008) simulation"
 version: 1.0.0
 date-released: 2026-11-11
+doi: 10.5281/zenodo.24186061
 license: MIT
 authors:
   - family-names: Wang

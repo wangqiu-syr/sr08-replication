@@ -1,12 +1,14 @@
 # Matching with local and non-local control groups: An R rebuild of Stuart and Rubin’s (2008) simulation
 
-Qiu Wang (Syracuse University) · Version 1.1.0 · November 2026 · [doi:10.5281/zenodo.24186060](https://doi.org/10.5281/zenodo.24186060)
+[Qiu Wang](https://orcid.org/0000-0003-1635-8050) (Syracuse University) · Version 1.1.0 · November 2026 · [doi:10.5281/zenodo.24186060](https://doi.org/10.5281/zenodo.24186060)
 
 Text and figures: [CC BY 4.0](../LICENSE-report). Code: [MIT](../LICENSE). How to reproduce every number: the [README](../README.md).
 
 ## Abstract
 
 Stuart and Rubin (2008) proposed matching treated units first to a local control group and, for units without a close local match, to a non-local group, with an adjustment for the difference between the two control groups. Their Appendix B simulation reports that the method removes 80.6% of initial squared bias on average. I rebuilt the simulation from the paper’s text alone and ran the original 2009 program at full scale (1,800 settings, 500 replications, 50 imputations). The original program reproduces the published tables to within half a percentage point on average over 71 cells. The rebuild removes 84.3%. The difference traces to two implementation details of the 2009 program: where the caliper is applied in the matching loop, and how one line updates the matched-control flags. With both added, the rebuild matches the original program to within 0.11 points per cell on average, below seed-to-seed noise. The method in Appendix A is unaffected; implemented as described, it performs somewhat better than published (84.3% vs 80.6% on average). Code, results and this report are public.
+
+*Keywords:* matching, non-local control groups, replication, simulation study, multiple imputation
 
 ## 1. Question
 
@@ -19,9 +21,11 @@ Their Appendix B reports a simulation in which the method removes 80.6% of the i
 
 ## 2. The SR08 design
 
-The rebuild follows the design of Appendix B and the procedure of Appendix A. Table 1 summarizes it in the ADEMP structure for simulation studies (Morris, White & Crowther, 2019; Siepe et al., 2024); the details follow.
+The rebuild follows the design of Appendix B and the procedure of Appendix A. Table 1 summarizes it in the ADEMP structure for simulation studies (Morris et al., 2019; Siepe et al., 2024); the details follow.
 
-**Table 1. ADEMP summary.**
+**Table 1**
+
+*ADEMP Summary of the Simulation Study*
 
 | Element | This study |
 | --- | --- |
@@ -30,6 +34,8 @@ The rebuild follows the design of Appendix B and the procedure of Appendix A. Ta
 | Estimands | The treatment effect, which is zero in every setting. |
 | Methods | Local/non-local matching with the adjustment of Appendix A and 50 imputations: the corrected rebuild, the variants that add the original program's two details, and the sensitivity variants (Section 3); and the original 2009 program, run in 2026. |
 | Performance measures | Percent reduction in ISB, averaged over the settings in each of the 71 cells of Tables B1–B4 and over all settings; the share of treated units matched in C1. Monte Carlo noise is measured by rerunning with a new seed (Section 3). |
+
+*Note.* ADEMP = aims, data-generating mechanisms, estimands, methods and performance measures. T = treated units; C1 = local control group; C2 = non-local control pool; D = 1 for the non-local group and 0 otherwise. Source: Stuart and Rubin (2008), Appendices A and B.
 
 - **Groups.** Treated units T, a local control group C1, and an effectively infinite non-local control pool C2. Here C1 and C2 are control groups. X<sub>T</sub> ~ N(B/2, σ²<sub>t</sub>) and X<sub>C1</sub> ~ N(−B/2, 2 − σ²<sub>t</sub>).
 - **Outcome model.** E(Y | X, D) = γ + exp(aX) + (δ<sub>0</sub> + δ<sub>1</sub>·X)·D, where D marks the non-local group. The true effect is zero, and outcomes are mean responses with no residual variance, so bias is measured by ISB.
@@ -62,7 +68,7 @@ The rebuild uses only base R and the bundled `parallel` package (R Core Team, 20
 
 **Test fixed in advance.** Before the comparison was run, a variant was said to match the original 2009 program if the mean absolute difference over the 71 cells was under 1 point and no cell differed by more than 5. The two programs use different random draws (seed 2009 with Mersenne-Twister against seed 2008 with L'Ecuyer-CMRG), so each cell was expected to differ by 1–2 points.
 
-**Monte Carlo error.** The tracked results hold one row per setting, not per replication, so Monte Carlo standard errors (Morris, White & Crowther, 2019) are not reported. Instead, the corrected rebuild was rerun with a new seed (2009), and the seed-to-seed variation is taken as the Monte Carlo noise: a mean of 0.2 and at most 1.55 points per cell over the 71 cells, and 84.1% against 84.3% for the overall mean. A difference between sources matters only if it is clearly larger than this.
+**Monte Carlo error.** The tracked results hold one row per setting, not per replication, so Monte Carlo standard errors (Morris et al., 2019) are not reported. Instead, the corrected rebuild was rerun with a new seed (2009), and the seed-to-seed variation is taken as the Monte Carlo noise: a mean of 0.2 and at most 1.55 points per cell over the 71 cells, and 84.1% against 84.3% for the overall mean. A difference between sources matters only if it is clearly larger than this.
 
 ## 4. Results
 
@@ -70,7 +76,11 @@ Comparisons cover the 71 cells of Tables B1–B4. The full cell-by-cell comparis
 
 ### 4.1 The rebuild does not reproduce the published tables
 
-**Table 2. Overall mean percentage reduction in ISB, and agreement with the paper over the 71 cells.**
+The original 2009 program reproduces the published tables, but the rebuild written from the paper does not (Table 2).
+
+**Table 2**
+
+*Mean Percentage Reduction in ISB and Agreement With the Paper, by Source*
 
 | Source | Mean % ISB reduction | Share matched in C1 | Mean abs diff from paper | Cells > 5 points off |
 | --- | --- | --- | --- | --- |
@@ -78,13 +88,19 @@ Comparisons cover the 71 cells of Tables B1–B4. The full cell-by-cell comparis
 | Original 2009 program, run in 2026 | 80.9 | 0.738 | 0.49 | 0 |
 | Rebuild, corrected (caliper inside loop) | 84.3 | 0.819 | 4.0 | 16 |
 | Rebuild, caliper after loop only | 71.7 | 0.740 | 10.2 | 26 |
-| Rebuild, caliper after loop + flag recycling | 81.0 | 0.740 | 0.49 | 0 |
+| Rebuild, caliper after loop + flag update | 81.0 | 0.740 | 0.49 | 0 |
 
-The original 2009 program, run in 2026, reproduces the published tables (mean absolute difference 0.49 points, no cell more than 5 off). The rebuild, implemented as Appendix A describes, removes more bias: 84.3% on average, with 16 of 71 cells more than 5 points from the paper.
+*Note.* Mean % ISB reduction is the mean over all 1,800 settings (the published value is from p. 296). The other columns compare the 71 cells of Tables B1–B4 with the paper, in percentage points. C1 = local control group; — = not applicable. Source: three_way.md.
 
-![Figure 1. Published vs reproduced, by cell](figures/fig1_published_vs_reproduced.png)
+The original 2009 program, run in 2026, reproduces the published tables (mean absolute difference 0.49 points, no cell more than 5 off). The rebuild, implemented as Appendix A describes, removes more bias: 84.3% on average, with 16 of 71 cells more than 5 points from the paper. Figure 1 plots each cell at its published value: the original program lies on the 45° line, and the corrected rebuild mostly above it.
 
-Each of the 71 cells of Tables B1–B4 is plotted at its published value: the original 2009 program (grey) lies on the 45° line, and the corrected rebuild (blue) lies mostly above it, removing more bias than published. Source: results_all.rds; three_way.md.
+**Figure 1**
+
+*Published and Reproduced Percentage Reduction in ISB, by Cell*
+
+![Scatter plot of the 71 cells: the original 2009 program on the 45-degree line, the corrected rebuild mostly above it](figures/fig1_published_vs_reproduced.png)
+
+*Note.* Each point is one of the 71 cells of Tables B1–B4, plotted at its published value. Grey points are the original 2009 program, run in 2026; blue points are the corrected rebuild. The line is the 45° line, where the reproduced value equals the published one; points above it remove more bias than published. Source: results_all.rds; three_way.md.
 
 ### 4.2 Two bookkeeping details explain the gap
 
@@ -103,28 +119,40 @@ Neither detail alone reproduces the published tables; both together do. The cali
 
 ### 4.3 With both details, the rebuild matches the original program
 
-**Table 3. Agreement over the 71 cells.**
+With both details, the rebuild is closer to the original program than two runs of the corrected rebuild with different seeds are to each other (Table 3).
+
+**Table 3**
+
+*Agreement Between Sources Over the 71 Cells*
 
 | Comparison | Mean abs diff | Max abs diff | Cells > 5 |
 | --- | --- | --- | --- |
-| **Caliper after loop + flag recycling vs the original 2009 program** | **0.11** | **0.54** | **0** |
-| Caliper after loop + flag recycling vs paper | 0.49 | 4.1 | 0 |
+| **Caliper after loop + flag update vs the original 2009 program** | **0.11** | **0.54** | **0** |
+| Caliper after loop + flag update vs paper | 0.49 | 4.1 | 0 |
 | Original 2009 program vs paper | 0.49 | 4.5 | 0 |
 | Caliper after loop only vs the original 2009 program | 10.5 | — | 28 |
 | Rebuild, corrected vs the original 2009 program | 3.9 | — | 13 |
 | Monte Carlo noise: rebuild, corrected, seed 2009 vs seed 2008 | 0.2 | 1.55 | 0 |
 
-By the test fixed in advance, the result is a match. The difference from the original 2009 program is smaller than the rebuild's own seed-to-seed noise. The share of treated units matched in C1 is 0.738 for the original program and 0.740 for the rebuild with both details.
+*Note.* Differences are in percentage points; cells > 5 counts the cells that differ by more than 5 points. The row in bold is the test fixed in advance (mean under 1 point, no cell over 5). — = not reported. Source: replication_verdict.md.
 
-![Figure 2. Which detail closes the gap](figures/fig2_which_detail.png)
+By the test fixed in advance, the result is a match. The difference from the original 2009 program is smaller than the rebuild's own seed-to-seed noise. The share of treated units matched in C1 is 0.738 for the original program and 0.740 for the rebuild with both details. Figure 2 shows each variant's mean absolute difference from the original program against the seed-to-seed noise: only the rebuild with both details falls below it.
 
-Only the rebuild with both details (blue) comes within the seed-to-seed noise of the original program (dashed line), while the corrected rebuild, its seed-2009 replicate and the after-loop caliper alone stay 3.8 to 10.5 points away. Source: results_all.rds; three_way.md; replication_verdict.md.
+**Figure 2**
 
-The two details move some cells far more than others, and they do not always lower the reduction.
+*Mean Absolute Difference From the Original 2009 Program, by Variant*
 
-**Table 4. Cells where the two details move the published value most.**
+![Dot plot: the rebuild with both details at 0.11, below the seed noise; the corrected rebuild, its seed replicate and the after-loop caliper at 3.8 to 10.5](figures/fig2_which_detail.png)
 
-| Cell | Paper | Original 2009 program | Caliper after loop + flag recycling | Rebuild, corrected |
+*Note.* Each dot is the mean absolute difference over the 71 cells between a variant and the original 2009 program, on a log scale. Blue marks the rebuild with both details (caliper after loop + flag update); grey marks the other variants. The dashed lines mark the seed-to-seed noise of the corrected rebuild over the 71 cells: mean 0.2 and maximum 1.55 points. Source: results_all.rds; three_way.md; replication_verdict.md.
+
+The two details move some cells far more than others, and they do not always lower the reduction. Table 4 lists the cells with the largest differences between the corrected rebuild and the paper.
+
+**Table 4**
+
+*Cells With the Largest Differences Between the Corrected Rebuild and the Paper*
+
+| Cell | Paper | Original 2009 program | Caliper after loop + flag update | Rebuild, corrected |
 | --- | --- | --- | --- | --- |
 | B4, σ²<sub>t</sub> = 1.5, a = 0.5 | 44 | 44 | 44 | 67 |
 | B2, σ²<sub>t</sub> = 1, δ<sub>1</sub> = 1.25 | 76 | 76 | 77 | 87 |
@@ -134,15 +162,25 @@ The two details move some cells far more than others, and they do not always low
 | B2, σ²<sub>t</sub> = 1.5, δ<sub>1</sub> = 1.25 | −30 | −27 | −27 | −14 |
 | B4, σ²<sub>t</sub> = 1.5, a = −1 | 70 | 75 | 74 | 65 |
 
-The corrected method gains up to 23 points in one cell (Table B4, σ²<sub>t</sub> = 1.5, a = 0.5: 67 vs 44). It is not better everywhere: at σ²<sub>t</sub> = 1.5, a = −1 it gives 65 vs 70.
+*Note.* Values are percentage reductions in ISB. The first six rows are the six cells where the corrected rebuild differs most from the paper; the last row is the largest loss, the only cell where the corrected rebuild removes more than 5 points less bias than published. Source: three_way.md.
 
-![Figure 3. Where the correction matters](figures/fig3_where_correction_matters.png)
+The corrected method gains up to 23 points in one cell (Table B4, σ²<sub>t</sub> = 1.5, a = 0.5: 67 vs 44). It is not better everywhere: at σ²<sub>t</sub> = 1.5, a = −1 it gives 65 vs 70. Figure 3 shows the difference for every cell of Tables B2–B4: the correction matters most at σ²<sub>t</sub> = 1.5.
 
-Corrected minus published reduction, per cell of Tables B2–B4, shows that the correction matters most at σ²<sub>t</sub> = 1.5, with the largest gain at a = 0.5 in Table B4 (+23 points) and the largest loss at a = −1 (−5 points). Source: results_all.rds; three_way.md.
+**Figure 3**
+
+*Corrected Minus Published Percentage Reduction in ISB, Tables B2–B4*
+
+![Three panels, one per table, of corrected minus published reduction per cell, grouped by sigma squared t; the largest gain and loss are labelled](figures/fig3_where_correction_matters.png)
+
+*Note.* Each point is one cell. Within each table, cells are grouped by σ²<sub>t</sub> and ordered by the varied parameter (δ<sub>1</sub>, B or a); lines join cells within a group only. The horizontal line marks no difference. Blue points mark the largest gain (B4, σ²<sub>t</sub> = 1.5, a = 0.5: +23 points) and the largest loss (B4, σ²<sub>t</sub> = 1.5, a = −1: −5 points). Source: results_all.rds; three_way.md.
 
 ### 4.4 Choices that do not explain the gap
 
-**Table 5. Sensitivity variants of the corrected rebuild (full grid, 500 replications, 50 imputations).**
+The other choices the text leaves open do not explain the gap (Table 5).
+
+**Table 5**
+
+*Sensitivity Variants of the Corrected Rebuild*
 
 | Variant | Mean % ISB reduction | Share matched in C1 | Mean abs diff from paper |
 | --- | --- | --- | --- |
@@ -152,6 +190,8 @@ Corrected minus published reduction, per cell of Tables B2–B4, shows that the 
 | Seed 2009 | 84.1 | 0.817 | 3.8 |
 | Treated matched largest X first | 87.6 | 0.846 | 7.0 |
 | Caliper after loop only | 71.7 | 0.740 | 10.2 |
+
+*Note.* Each variant ran on the full grid with 500 replications and 50 imputations. Mean % ISB reduction is the mean over all settings; mean abs diff from paper is over the 71 cells, in percentage points. C1 = local control group. Source: sensitivity.md.
 
 - **No effect.** δ<sub>0</sub> = 1 vs 0, a caliper on the true σ<sub>t</sub> instead of the sample SD, the a = 0 convention, and a new seed all leave results within noise. Seed-to-seed noise is at most 1.55 points per cell. With δ<sub>0</sub> = 1 the tables change by at most 1.4 × 10<sup>−14</sup> points, because the intercept in the d model absorbs it.
 - **Matching order.** Matching the treated units largest X first raises the reduction to 87.6% and moves the rebuild further from the paper, so random order is kept.
@@ -163,7 +203,7 @@ Corrected minus published reduction, per cell of Tables B2–B4, shows that the 
 
 **Comparing with the published tables.** Anyone who implements the method as described and compares it with Stuart and Rubin's (2008) tables should expect to differ from them by about 4 points on average, with 16 of 71 cells more than 5 points off. This is a property of the original simulation program, not an error in the implementation.
 
-**Lesson.** A shorter logical vector used to index a longer one is silently recycled in R. A one-line check such as `stopifnot(length(flag) == length(x))` would have caught this. An independent rebuild with a switch for each suspected difference isolated the cause quickly. More generally, an independent rebuild from a paper's text, with a switch for each suspected difference, is an effective way to check a published simulation.
+**Lesson.** A shorter logical vector used to index a longer one is silently recycled in R. A one-line check such as `stopifnot(length(flag) == length(x))` would have caught this. More generally, an independent rebuild from a paper's text, with a switch for each suspected difference, is an effective way to check a published simulation.
 
 **Limitations.** The column for the original 2009 program comes from a 2026 run of that program, which is not included here, so it cannot be regenerated from this repository; the `recycle_flags` switch reproduces its behaviour from a description, not from its code. Percent reduction is unstable when the initial ISB is near zero, so `results/sr08/summary.md` also reports the mean initial and remaining ISB. The check covers the simulation in Appendix B only.
 

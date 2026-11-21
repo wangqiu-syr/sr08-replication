@@ -83,10 +83,13 @@ plot(mad[ord], y, log = "x", xlim = c(0.08, 15), ylim = c(0.5, length(ord) + 0.5
      pch = 16, cex = 1.3, col = ifelse(ord == 3, blue, grey), yaxt = "n", bty = "l", ylab = "",
      xlab = "Mean absolute difference from the original program\n(percentage points, log scale)")
 axis(2, at = y, labels = names(mad)[ord], tick = FALSE, cex.axis = 0.9)
-abline(v = noise_mean, lty = 2, col = grey)
-text(noise_mean, length(ord) + 0.45,
-     sprintf("seed noise: mean %.1f, max %.2f", noise_mean, noise_max),
-     pos = 4, cex = 0.8, col = grey, offset = 0.3)
+abline(v = c(noise_mean, noise_max), lty = 2, col = grey)
+text(noise_mean, length(ord) + 0.45, sprintf("seed noise, mean (%.1f)", noise_mean),
+     pos = 4, cex = 0.75, col = grey, offset = 0.3)
+text(noise_max, length(ord) + 0.45, sprintf("seed noise, max (%.2f)", noise_max),
+     pos = 4, cex = 0.75, col = grey, offset = 0.3)
+legend(0.21, 3.35, bty = "n", pch = 16, col = c(blue, grey), cex = 0.75,
+       legend = c("both details", "other variants"))
 mad_lab <- c("3.9", "10.5", "0.11", sprintf("%.1f", mad_seed))
 text(mad[ord], y, mad_lab[ord], pos = 3, cex = 0.8,
      col = ifelse(ord == 3, blue, grey), offset = 0.5)
@@ -97,7 +100,6 @@ diff <- corrected - tw_cells$paper
 tab <- sub(" .*$", "", tw_cells$cell)
 keep <- tab %in% c("B2", "B3", "B4")
 s2t <- ifelse(keep, suppressWarnings(as.numeric(sub("^.*s2t=([^ ]+) .*$", "\\1", tw_cells$cell))), NA)
-lab_var <- c(B2 = "δ1", B3 = "B", B4 = "a")
 i_max <- which(keep)[which.max(diff[keep])]
 i_min <- which(keep)[which.min(diff[keep])]
 
@@ -119,16 +121,15 @@ for (tb in c("B2", "B3", "B4")) {
     points(x[k], diff[idx][k], pch = 16, col = grey, cex = 0.9)
     mtext(bquote(sigma[t]^2 == .(s)), side = 1, line = 0.8, at = mean(x[k]), cex = 0.6)
   }
-  mtext(switch(tb, B2 = quote("cells by" ~ delta[1] ~ "within" ~ sigma[t]^2),
-               B3 = quote("cells by B within" ~ sigma[t]^2),
-               B4 = quote("cells by a within" ~ sigma[t]^2)), side = 1, line = 2.4, cex = 0.62)
+  mtext(switch(tb, B2 = quote(delta[1] ~ "(0\u20131.25) within" ~ sigma[t]^2),
+               B3 = quote("B (0.5\u20131.5) within" ~ sigma[t]^2),
+               B4 = quote("a (\u22121 to 1) within" ~ sigma[t]^2)), side = 1, line = 2.4, cex = 0.62)
   for (i in c(i_max, i_min)) if (i %in% idx) {
     xi <- x[match(i, idx)]
     points(xi, diff[i], pch = 16, col = blue, cex = 1.1)
-    lab <- sprintf("%s, \u03c3\u00b2t = %s, %s: %s", tb, s2t[i],
-                   sub("=", " = ", sub("^.* ", "", tw_cells$cell[i])),
-                   sub("-", "\u2212", sprintf("%+.0f", diff[i])))
-    lab <- gsub("= -", "= \u2212", lab)
+    par_txt <- sub("-", "\u2212", sub("=", " = ", sub("^.* ", "", tw_cells$cell[i])))
+    d_txt <- sub("-", "\u2212", sprintf("%+.0f", diff[i]))
+    lab <- bquote(.(tb) * "," ~ sigma[t]^2 == .(s2t[i]) * "," ~ .(par_txt) * ":" ~ .(d_txt))
     if (diff[i] > 0) text(xi, diff[i], lab, pos = 2, col = blue, cex = 0.75, offset = 0.4, xpd = NA)
     else text(xi + 0.6, diff[i] - 1.3, lab, adj = c(1, 1), col = blue, cex = 0.75, xpd = NA)  }
 }

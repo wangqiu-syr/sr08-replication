@@ -16,13 +16,17 @@ section#abstract { margin: 0 0.35in 10pt; padding: 8pt 12pt; border-top: 0.75pt 
 section#abstract h2 { margin-top: 0; font-size: 11pt; text-align: center; }
 table { border-collapse: collapse; width: 100%; margin: 10pt 0 8pt; break-inside: avoid; font-family: "Liberation Sans", "DejaVu Sans", sans-serif; font-size: 8pt; line-height: 1.3; }
 col { width: auto !important; }
-caption { caption-side: top; text-align: left; font-family: "Liberation Serif", "DejaVu Serif", serif; font-size: 10.5pt; font-weight: bold; line-height: 1.35; margin: 0 0 4pt; }
+caption { caption-side: top; text-align: left; font-family: "Liberation Serif", "DejaVu Serif", serif; font-size: 10.5pt; font-weight: normal; line-height: 1.35; margin: 0 0 4pt; }
 th, td { padding: 2.5pt 4pt; vertical-align: top; text-align: left; }
 thead th { border-top: 1pt solid #111; border-bottom: 0.6pt solid #111; }
 tbody tr:last-child td { border-bottom: 1pt solid #111; }
 tr { break-inside: avoid; }
 figure { margin: 10pt 0 4pt; display: flex; flex-direction: column; break-inside: avoid; }
-figcaption { order: -1; font-weight: bold; margin: 0 0 4pt; text-align: left; }
+figcaption { order: -1; font-weight: normal; margin: 0 0 4pt; text-align: left; }
 img { max-width: 100%; height: auto; }
 figure img { max-width: 100%; max-height: 7.6in; object-fit: contain; align-self: center; }
 figure + p { font-size: 9pt; }
+/* APA 7 tables and figures (see filter.lua): number, title, body and note stay on one page. */
+.float { break-inside: avoid; margin: 10pt 0 8pt; }
+.float table, .float figure { margin-bottom: 4pt; }
+.float > p { font-size: 9pt; text-align: left; }

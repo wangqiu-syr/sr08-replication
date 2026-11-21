@@ -1,6 +1,6 @@
 # Matching with local and non-local control groups: An R rebuild of Stuart and Rubin’s (2008) simulation
 
-Qiu Wang (Syracuse University) · Version 1.1.0 · November 2026
+Qiu Wang (Syracuse University) · Version 1.1.0 · November 2026 · [doi:10.5281/zenodo.24186060](https://doi.org/10.5281/zenodo.24186060)
 
 Text and figures: [CC BY 4.0](../LICENSE-report). Code: [MIT](../LICENSE). How to reproduce every number: the [README](../README.md).
 
@@ -15,7 +15,17 @@ Their Appendix B reports a simulation in which the method removes 80.6% of the i
 
 ## 2. The SR08 design
 
-The rebuild follows the design of Appendix B and the procedure of Appendix A.
+The rebuild follows the design of Appendix B and the procedure of Appendix A. Table 1 summarizes it in the ADEMP structure for simulation studies (Morris, White & Crowther, 2019; Siepe et al., 2024); the details follow.
+
+**Table 1. ADEMP summary.**
+
+| Element | This study |
+| --- | --- |
+| Aims | Check whether the simulation in Appendix B of Stuart and Rubin (2008) can be reproduced from the paper's text, and explain any gap. |
+| Data-generating mechanisms | X<sub>T</sub> ~ N(B/2, σ²<sub>t</sub>), X<sub>C1</sub> ~ N(−B/2, 2 − σ²<sub>t</sub>), C2 effectively infinite; E(Y \| X, D) = γ + exp(aX) + (δ<sub>0</sub> + δ<sub>1</sub>·X)·D; 1,800 settings (the grid below), 500 replications each. |
+| Estimands | The treatment effect, which is zero in every setting. |
+| Methods | Local/non-local matching with the adjustment of Appendix A and 50 imputations: the corrected rebuild, the variants that add the original program's two details, and the sensitivity variants (Section 3); and the original 2009 program, run in 2026. |
+| Performance measures | Percent reduction in ISB, averaged over the settings in each of the 71 cells of Tables B1–B4 and over all settings; the share of treated units matched in C1. Monte Carlo noise is measured by rerunning with a new seed (Section 3). |
 
 - **Groups.** Treated units T, a local control group C1, and an effectively infinite non-local control pool C2. Here C1 and C2 are control groups. X<sub>T</sub> ~ N(B/2, σ²<sub>t</sub>) and X<sub>C1</sub> ~ N(−B/2, 2 − σ²<sub>t</sub>).
 - **Outcome model.** E(Y | X, D) = γ + exp(aX) + (δ<sub>0</sub> + δ<sub>1</sub>·X)·D, where D marks the non-local group. The true effect is zero, and outcomes are mean responses with no residual variance, so bias is measured by ISB.
@@ -48,13 +58,15 @@ The rebuild uses only base R and the bundled `parallel` package (R Core Team, 20
 
 **Test fixed in advance.** Before the comparison was run, a variant was said to match the original 2009 program if the mean absolute difference over the 71 cells was under 1 point and no cell differed by more than 5. The two programs use different random draws (seed 2009 with Mersenne-Twister against seed 2008 with L'Ecuyer-CMRG), so each cell was expected to differ by 1–2 points.
 
+**Monte Carlo error.** The tracked results hold one row per setting, not per replication, so Monte Carlo standard errors (Morris, White & Crowther, 2019) are not reported. Instead, the corrected rebuild was rerun with a new seed (2009), and the seed-to-seed variation is taken as the Monte Carlo noise: a mean of 0.2 and at most 1.5 points per cell over the 71 cells, and 84.1% against 84.3% for the overall mean. A difference between sources matters only if it is clearly larger than this.
+
 ## 4. Results
 
 Comparisons cover the 71 cells of Tables B1–B4. The full cell-by-cell comparison is in [docs/three_way.md](../docs/three_way.md), the verdict in [docs/replication_verdict.md](../docs/replication_verdict.md), and the sensitivity variants in [docs/sensitivity.md](../docs/sensitivity.md).
 
 ### 4.1 The rebuild does not reproduce the published tables
 
-**Table 1. Mean percentage reduction in ISB over the 71 cells, by source.**
+**Table 2. Mean percentage reduction in ISB over the 71 cells, by source.**
 
 | Source | Mean % ISB reduction | Share matched in C1 | Mean abs diff from paper | Cells > 5 points off |
 | --- | --- | --- | --- | --- |
@@ -83,7 +95,7 @@ Neither detail alone reproduces the published tables; both together do. The cali
 
 ### 4.3 With both details, the rebuild matches the original program
 
-**Table 2. Agreement over the 71 cells.**
+**Table 3. Agreement over the 71 cells.**
 
 | Comparison | Mean abs diff | Max abs diff | Cells > 5 |
 | --- | --- | --- | --- |
@@ -98,7 +110,7 @@ By the test fixed in advance, the result is a match. The difference from the ori
 
 The two details move some cells far more than others, and they do not always lower the reduction.
 
-**Table 3. Cells where the two details move the published value most.**
+**Table 4. Cells where the two details move the published value most.**
 
 | Cell | Paper | Original 2009 program | Caliper after loop + flag recycling | Rebuild, corrected |
 | --- | --- | --- | --- | --- |
@@ -114,7 +126,7 @@ The corrected method gains up to 23 points in one cell (Table B4, σ²<sub>t</su
 
 ### 4.4 Choices that do not explain the gap
 
-**Table 4. Sensitivity variants of the corrected rebuild (full grid, 500 replications, 50 imputations).**
+**Table 5. Sensitivity variants of the corrected rebuild (full grid, 500 replications, 50 imputations).**
 
 | Variant | Mean % ISB reduction | Share matched in C1 | Mean abs diff from paper |
 | --- | --- | --- | --- |
@@ -151,7 +163,9 @@ Code, documentation and analyses were developed with Claude (Anthropic) as a cod
 
 ## References
 
+- Morris, T. P., White, I. R., & Crowther, M. J. (2019). Using simulation studies to evaluate statistical methods. *Statistics in Medicine, 38*(11), 2074–2102. https://doi.org/10.1002/sim.8086
 - R Core Team. (2025). *R: A language and environment for statistical computing* (Version 4.5.1). R Foundation for Statistical Computing. https://www.R-project.org/
 - Rubin, D. B. (1979). Using multivariate matched sampling and regression adjustment to control bias in observational studies. *Journal of the American Statistical Association, 74*(366), 318–328. https://doi.org/10.1080/01621459.1979.10482513
 - Rubin, D. B. (1987). *Multiple imputation for nonresponse in surveys*. Wiley. https://doi.org/10.1002/9780470316696
+- Siepe, B. S., Bartoš, F., Morris, T. P., Boulesteix, A.-L., Heck, D. W., & Pawel, S. (2024). Simulation studies for methodological research in psychology: A standardized template for planning, preregistration, and reporting. *Psychological Methods*. Advance online publication. https://doi.org/10.1037/met0000695
 - Stuart, E. A., & Rubin, D. B. (2008). Matching with multiple control groups with adjustment for group differences. *Journal of Educational and Behavioral Statistics, 33*(3), 279–306. https://doi.org/10.3102/1076998607306078

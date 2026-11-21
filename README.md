@@ -2,7 +2,7 @@
 
 Qiu Wang, Syracuse University · Version 1.1.0 · November 2026 · **[Read the report](report/report.md)** ([PDF](report/report.pdf))
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24186061.svg)](https://doi.org/10.5281/zenodo.24186061)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24186060.svg)](https://doi.org/10.5281/zenodo.24186060)
 
 This repository is the replication package for the report. The study itself, with the question, the SR08 design, the materials, the results and the discussion, is in [report/report.md](report/report.md). This README says how to reproduce every number in it.
 
@@ -34,7 +34,7 @@ README.md          this file: the replication guide
 report/            the study
   report.md          question, the SR08 design, materials, results, discussion, references
   report.pdf         the same report as a PDF, built from report.md by pdf/build.sh
-  pdf/               build.sh, filter.lua, print.js, style.css (the PDF build)
+  pdf/               build.sh, filter.lua, print.js, style.css (the PDF build), and README.md (how report.pdf was built)
 R/
   sr08_appendixB.R   the rebuild, with switches for each variant and the full, sensitivity and variants_2009 run modes
   run_smoke.R        quick check on a 16-setting grid
@@ -114,9 +114,9 @@ Code, documentation and analyses were developed with Claude (Anthropic) as a cod
 
 ## How to cite
 
-Use the metadata in [CITATION.cff](CITATION.cff) (GitHub's "Cite this repository" button), and please also cite Stuart and Rubin (2008).
+Use the metadata in [CITATION.cff](CITATION.cff) (GitHub's "Cite this repository" button), and please also cite Stuart and Rubin (2008). The DOI is Zenodo's concept DOI, which always resolves to the latest version.
 
-> Wang, Q. (2026). *Matching with local and non-local control groups: An R rebuild of Stuart and Rubin’s (2008) simulation* (Version 1.1.0) [Computer software and report]. Zenodo. https://doi.org/10.5281/zenodo.24186061
+> Wang, Q. (2026). *Matching with local and non-local control groups: An R rebuild of Stuart and Rubin’s (2008) simulation* (Version 1.1.0) [Computer software and report]. Zenodo. https://doi.org/10.5281/zenodo.24186060
 
 > Stuart, E. A., & Rubin, D. B. (2008). Matching with multiple control groups with adjustment for group differences. *Journal of Educational and Behavioral Statistics, 33*(3), 279–306. https://doi.org/10.3102/1076998607306078
 

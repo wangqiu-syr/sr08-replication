@@ -4,7 +4,7 @@ type: software
 title: "Matching with local and non-local control groups: An R rebuild of Stuart and Rubin’s (2008) simulation"
 version: "1.1.0"
 date-released: "2026-11-20"
-doi: "10.5281/zenodo.24186061"
+doi: "10.5281/zenodo.24186060"
 # MIT for the code (LICENSE); CC BY 4.0 for the report text and figures (LICENSE-report).
 license:
   - MIT

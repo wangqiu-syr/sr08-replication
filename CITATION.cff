@@ -3,17 +3,23 @@ message: "If you use this code, the report or its results, please cite it as bel
 type: software
 title: "Matching with local and non-local control groups: An R rebuild of Stuart and Rubin’s (2008) simulation"
 version: "1.1.0"
-date-released: "2026-11-20"
+date-released: "2026-11-21"
 doi: "10.5281/zenodo.24186060"
-# MIT for the code (LICENSE); CC BY 4.0 for the report text and figures (LICENSE-report).
-license:
-  - MIT
-  - CC-BY-4.0
+# Zenodo reads a single license string. The code is MIT (LICENSE); the report text and
+# figures are CC BY 4.0 (LICENSE-report).
+license: MIT
 repository-code: "https://github.com/wangqiu-syr/sr08-replication"
+keywords:
+  - matching
+  - non-local control groups
+  - replication
+  - simulation study
+  - multiple imputation
 authors:
   - family-names: Wang
     given-names: Qiu
     affiliation: Syracuse University
+    orcid: "https://orcid.org/0000-0003-1635-8050"
 references:
   - type: article
     title: "Matching with multiple control groups with adjustment for group differences"
@@ -28,4 +34,4 @@ references:
     start: 279
     end: 306
     year: 2008
-    doi: 10.3102/1076998607306078
+    doi: "10.3102/1076998607306078"

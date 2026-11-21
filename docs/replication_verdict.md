@@ -42,7 +42,7 @@ with L'Ecuyer-CMRG), so each cell was expected to differ by 1-2 points.
 | **(b) caliper_after_recycle vs the original 2009 program** | **0.11** | **0.54** | **0** |
 | (b) caliper_after_recycle vs paper | 0.49 | 4.1 | 0 |
 | the original 2009 program vs paper | 0.49 | 4.5 | 0 |
-| caliper_after_loop (no flag recycling) vs the original 2009 program | 10.5 | — | 28 |
+| caliper_after_loop (no flag update) vs the original 2009 program | 10.5 | — | 28 |
 | rebuild baseline vs the original 2009 program | 3.9 | — | 13 |
 | Monte Carlo noise: rebuild baseline, seed 2009 vs seed 2008 | 0.2 | 1.55 | 0 |
 
@@ -58,10 +58,10 @@ Which differences from the rebuild baseline matter:
 | d0 = 1 instead of 0 | none (max 1.4e-14 points); the d model's intercept absorbs it | variant d0_1 |
 | caliper 0.2 x true sigma_t instead of 0.2 x sample SD | none (within noise) | sensitivity.md, caliper_true |
 | caliper applied after the greedy loop | fits s2t = 1 but overshoots badly at s2t = 1.5 | caliper_after_loop |
-| flag recycling, on top of the after-loop caliper | closes the rest of the gap | caliper_after_recycle |
+| flag update, on top of the after-loop caliper | closes the rest of the gap | caliper_after_recycle |
 
-Neither the after-loop caliper nor the flag recycling reproduces the paper alone. Only the
-two together do.
+The caliper after the loop alone does not reproduce the tables; with the flag update added,
+it does.
 
 Cells where the two details move the published value most:
 

@@ -10,7 +10,7 @@ This repository is the replication package for the report. The study itself, wit
 
 Stuart and Rubin (2008) proposed matching treated units first to a local control group and then, for units with no close local match, to a non-local group, with an adjustment for the difference between the two control groups.
 
-- **Published vs rebuilt.** Their Appendix B simulation reports that the method removes 80.6% of the initial squared bias (ISB) on average. An independent rebuild of that simulation, written from the paper's text alone, removes **84.3%**.
+- **Published vs rebuilt.** Their Appendix B simulation reports that the method removes 80.6% of the integrated squared bias (ISB) on average. An independent rebuild of that simulation, written from the paper's text alone, removes **84.3%**.
 - **Cause of the gap.** Two bookkeeping details of the original program: where the caliper is applied in the matching loop, and how one line updates the matched-control flags.
 - **Gap explained.** With both details added, the rebuild reproduces the original program to within 0.11 percentage points per table cell on average (at most 0.54), and the published tables to within 0.49 points on average, with no cell more than 5 points off.
 - **The method stands.** The procedure in the paper's Appendix A is unaffected. Corrected, it removes more bias than published on average, by up to 23 points in one cell, though not in every cell.
@@ -67,7 +67,7 @@ Rscript R/sr08_appendixB.R full            # -> results/sr08/intercept_TRUE, int
 # 2. Caliper after the loop only, and 4. the sensitivity runs
 #    (caliper_true, order_high_low, a0_linear, caliper_after_loop, seed_2009)
 Rscript R/sr08_appendixB.R sensitivity     # -> results/sr08/sens_*, sensitivity.md
-# 3. Caliper after the loop + flag recycling (reproduces the published tables), and d0 = 1
+# 3. Caliper after the loop + flag update (reproduces the published tables), and d0 = 1
 Rscript R/sr08_appendixB.R variants_2009   # -> results/sr08/sens_caliper_after_recycle, sens_d0_1
 # 5. Figures 1–3 of the report, from the results above (seconds; no simulation)
 Rscript R/report_figures.R                 # -> report/figures/*.png
@@ -82,7 +82,7 @@ source("R/sr08_appendixB.R")
 g <- sr08_grid()                                            # 1,800 settings
 sr08_run(g, reps = 500, J = 50, seed = 2008, intercept = TRUE)              # 1. corrected method
 sr08_run(g, caliper_when = "after")                                         # 2. caliper after the loop
-sr08_run(g, caliper_when = "after", recycle_flags = TRUE)                   # 3. + flag recycling
+sr08_run(g, caliper_when = "after", recycle_flags = TRUE)                   # 3. + flag update
 sr08_run(g, seed = 2009)                                    # 4. seed
 sr08_run(g, caliper = "true")                               #    caliper on the true sigma_t
 sr08_run(g, d0 = 1)                                         #    delta0 = 1

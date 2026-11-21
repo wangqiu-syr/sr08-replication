@@ -6,7 +6,7 @@ Text and figures: [CC BY 4.0](../LICENSE-report). Code: [MIT](../LICENSE). How t
 
 ## Abstract
 
-Stuart and Rubin (2008) proposed matching treated units first to a local control group and, for units without a close local match, to a non-local group, with an adjustment for the difference between the two control groups. Their Appendix B simulation reports that the method removes 80.6% of initial squared bias on average. I rebuilt the simulation from the paper’s text alone and ran the original 2009 program at full scale (1,800 settings, 500 replications, 50 imputations). The original program reproduces the published tables to within half a percentage point on average over 71 cells. The rebuild removes 84.3%. The difference traces to two implementation details of the 2009 program: where the caliper is applied in the matching loop, and how one line updates the matched-control flags. With both added, the rebuild matches the original program to within 0.11 points per cell on average, below seed-to-seed noise. The method in Appendix A is unaffected; implemented as described, it performs somewhat better than published (84.3% vs 80.6% on average). Code, results and this report are public.
+Stuart and Rubin (2008) proposed matching treated units first to a local control group and, for units without a close local match, to a non-local group, with an adjustment for the difference between the two control groups. Their Appendix B simulation reports that the method removes 80.6% of the integrated squared bias (ISB) on average. I rebuilt the simulation from the paper’s text alone and ran the original 2009 program at full scale (1,800 settings, 500 replications, 50 imputations). The original program reproduces the published tables to within half a percentage point on average over 71 cells. The rebuild removes 84.3%. The difference traces to two implementation details of the 2009 program: where the caliper is applied in the matching loop, and how one line updates the matched-control flags. With both added, the rebuild matches the original program to within 0.11 points per cell on average, below seed-to-seed noise. The method in Appendix A is unaffected; implemented as described, it performs somewhat better than published (84.3% vs 80.6% on average). Code, results and this report are public.
 
 *Keywords:* matching, non-local control groups, replication, simulation study, multiple imputation
 
@@ -14,7 +14,7 @@ Stuart and Rubin (2008) proposed matching treated units first to a local control
 
 Stuart and Rubin (2008; SR08) proposed matching treated units first to a local control group and then, for units with no close local match, to a non-local group, with an adjustment for the difference between the two control groups. In school-based program evaluations, a treated student's own school can have few good comparison students, while nearby schools offer a much larger pool.
 
-Their Appendix B reports a simulation in which the method removes 80.6% of the initial squared bias (ISB) on average (p. 296). In 2009 I ran a replication of Appendix B for my dissertation work and could not reproduce the published results. I returned to the question in 2026, before applying and extending the method to school-based program data. This report asks two questions:
+Their Appendix B reports a simulation in which the method removes 80.6% of the integrated squared bias (ISB) on average (p. 296). Stuart and Rubin (2008, §4.1, Appendix B) call the value before matching the initial ISB (IISB), and the percentage reduction is 100 · (IISB − ISB)/IISB. In 2009 I ran a replication of Appendix B for my dissertation work and could not reproduce the published results. I returned to the question in 2026, before applying and extending the method to school-based program data. This report asks two questions:
 
 1. Does an independent rebuild of the simulation, written from the paper's text alone, reproduce the published tables?
 2. If not, what causes the gap, and does it affect the method or only the published simulation?
@@ -50,7 +50,7 @@ Where the text leaves a choice open, the rebuild takes the reading below and tes
 - the caliper is 0.2 times the sample SD of X in the treated group, and it is applied inside the greedy loop, as each treated unit is matched;
 - treated units are matched in random (draw) order;
 - the d model includes an intercept, as the n − (p + 2) degrees of freedom imply;
-- when a = 0, exp(aX) is kept as the constant 1 and the initial bias is defined from the difference in X. The alternative is the Rubin (1979) limit, V(X) = X.
+- when a = 0, exp(aX) is kept as the constant 1 and the initial ISB is defined from the difference in X. The alternative is the Rubin (1979) limit, V(X) = X.
 
 ## 3. Materials
 
@@ -58,7 +58,7 @@ Where the text leaves a choice open, the rebuild takes the reading below and tes
 
 **The original 2009 program.** The original 2009 simulation program was provided by Elizabeth A. Stuart. It was run in 2026 with its simulation code unchanged, using 500 replications, 50 imputations and seed 2009. It uses δ<sub>0</sub> = 1, a caliper of 0.2 times the true σ<sub>t</sub> applied after the greedy loop, and the multiple-imputation difference in means. It is not part of this repository and is not redistributed (see Acknowledgment).
 
-**The rebuild.** [R/sr08_appendixB.R](../R/sr08_appendixB.R) was written independently from the published description (Wang, 2026). It has a switch for each suspected difference from the original program; the two switches below were added after the original program had been run:
+**The rebuild.** [R/sr08_appendixB.R](../R/sr08_appendixB.R) was written independently from the published description (Wang, 2026). It has a switch for each suspected difference from the original program. The two switches test differences found when the original program was read and run:
 
 - `caliper_when = "after"`: greedy nearest-unused matching for every treated unit first, then pairs outside the caliper dropped (their controls stay used);
 - `recycle_flags = TRUE`: the original program's way of updating the matched-control flags, written from a description of its behaviour;

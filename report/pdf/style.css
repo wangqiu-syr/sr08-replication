@@ -1,0 +1,28 @@
+/* Print style for report/report.pdf (see build.sh). US Letter; the margins
+   and the page footer are set in print.js. */
+body { font-family: "Liberation Serif", "DejaVu Serif", serif; font-size: 10.5pt; line-height: 1.42; color: #111; }
+body { margin: 0; padding: 0; max-width: none; background: #fff; }
+h1 { font-size: 17pt; line-height: 1.25; margin: 0 0 10pt; text-align: center; }
+h1 + p { text-align: center; margin: 0 0 4pt; }
+h1 + p + p { text-align: center; font-size: 9pt; color: #444; margin: 0 0 14pt; }
+h2 { font-size: 13pt; margin: 16pt 0 6pt; break-after: avoid; }
+h3 { font-size: 11pt; margin: 12pt 0 4pt; break-after: avoid; }
+p { margin: 0 0 6pt; orphans: 3; widows: 3; text-align: justify; hyphens: auto; }
+ul, ol { margin: 0 0 6pt; padding-left: 18pt; }
+li { margin: 0 0 2pt; }
+a { color: #1a4f8b; text-decoration: none; }
+code { font-family: "Liberation Mono", "DejaVu Sans Mono", monospace; font-size: 0.88em; }
+section#abstract { margin: 0 0.35in 10pt; padding: 8pt 12pt; border-top: 0.75pt solid #999; border-bottom: 0.75pt solid #999; }
+section#abstract h2 { margin-top: 0; font-size: 11pt; text-align: center; }
+table { border-collapse: collapse; width: 100%; margin: 10pt 0 8pt; break-inside: avoid; font-family: "Liberation Sans", "DejaVu Sans", sans-serif; font-size: 8pt; line-height: 1.3; }
+col { width: auto !important; }
+caption { caption-side: top; text-align: left; font-family: "Liberation Serif", "DejaVu Serif", serif; font-size: 10.5pt; font-weight: bold; line-height: 1.35; margin: 0 0 4pt; }
+th, td { padding: 2.5pt 4pt; vertical-align: top; text-align: left; }
+thead th { border-top: 1pt solid #111; border-bottom: 0.6pt solid #111; }
+tbody tr:last-child td { border-bottom: 1pt solid #111; }
+tr { break-inside: avoid; }
+figure { margin: 10pt 0 4pt; display: flex; flex-direction: column; break-inside: avoid; }
+figcaption { order: -1; font-weight: bold; margin: 0 0 4pt; text-align: left; }
+img { max-width: 100%; height: auto; }
+figure img { max-width: 100%; max-height: 7.6in; object-fit: contain; align-self: center; }
+figure + p { font-size: 9pt; }

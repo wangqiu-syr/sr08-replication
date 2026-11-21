@@ -1,10 +1,15 @@
 cff-version: 1.2.0
-message: "If you use this software, please cite it as below."
+message: "If you use this code, the report or its results, please cite it as below, and cite Stuart and Rubin (2008)."
+type: software
 title: "Matching with local and non-local control groups: An R rebuild of Stuart and Rubin’s (2008) simulation"
-version: 1.0.0
-date-released: 2026-11-11
-doi: 10.5281/zenodo.24186061
-license: MIT
+version: "1.1.0"
+date-released: "2026-11-20"
+doi: "10.5281/zenodo.24186061"
+# MIT for the code (LICENSE); CC BY 4.0 for the report text and figures (LICENSE-report).
+license:
+  - MIT
+  - CC-BY-4.0
+repository-code: "https://github.com/wangqiu-syr/sr08-replication"
 authors:
   - family-names: Wang
     given-names: Qiu

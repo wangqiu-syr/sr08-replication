@@ -1,8 +1,10 @@
 # Matching with local and non-local control groups: An R rebuild of Stuart and Rubin’s (2008) simulation
 
-Qiu Wang, Syracuse University · v1.0 · November 2026
+Qiu Wang, Syracuse University · Version 1.1.0 · November 2026 · **[Read the report](report/report.md)** ([PDF](report/report.pdf))
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24186061.svg)](https://doi.org/10.5281/zenodo.24186061)
+
+This repository is the replication package for the report. The study itself, with the question, the SR08 design, the materials, the results and the discussion, is in [report/report.md](report/report.md). This README says how to reproduce every number in it.
 
 ## Key findings
 
@@ -13,45 +15,9 @@ Stuart and Rubin (2008) proposed matching treated units first to a local control
 - **Gap explained.** With both details added, the rebuild reproduces the original program to within 0.11 percentage points per table cell on average (at most 0.54), and the published tables to within 0.49 points on average, with no cell more than 5 points off.
 - **The method stands.** The procedure in the paper's Appendix A is unaffected. Corrected, it removes more bias than published on average, by up to 23 points in one cell, though not in every cell.
 
-## Why this replication
-
-In school-based program evaluations, a treated student's own school often has few good comparison students, while nearby schools offer a much larger pool. That is the local/non-local setting of Stuart and Rubin (2008). Before applying and extending their method to such data, I reproduced its simulation as a foundation.
-
-## Background
-
-The original 2009 simulation program was provided by Elizabeth A. Stuart. It is not part of this repository. Everything here was written independently from the published description:
-
-> Stuart, E. A., & Rubin, D. B. (2008). Matching with multiple control groups with adjustment for group differences. *Journal of Educational and Behavioral Statistics, 33*(3), 279–306.
-
-In 2009 I ran a replication of Appendix B for my dissertation work and could not reproduce the published results. I returned to the question in 2026.
-
-## Design (as in Appendix B)
-
-- **Groups.** Treated units T, a local control group C1, and an effectively infinite non-local control pool C2. Here C1 and C2 are control groups.
-- **Outcome model.** E(Y | X, D) = γ + exp(aX) + (δ0 + δ1·X)·D, where D marks the non-local group.
-- **Matching.** Greedy 1:1 matching of T to C1 with a caliper of 0.2 SD. Treated units without a C1 match within the caliper are matched to C2.
-- **Adjustment.** The group difference d is estimated from `lm(y ~ x + D)`, with an intercept, on the C1 and C2 controls. Y(0) for C2-matched units is imputed by multiple imputation (J = 50) and combined with Rubin's rules.
-- **Criterion.** Percent reduction in ISB, averaged over settings.
-- **Scale.** 1,800 settings × 500 replications × 50 imputations.
-
-## What differed
-
-Two details of the original program affect which controls end up in the analysis:
-
-1. **When the caliper is applied.** The original program applied it after the matching loop had finished. The rebuild applies it inside the loop, as each treated unit is matched.
-2. **How the matched-control flags are updated.** After the loop, the original program used a condition computed over the treated units to update flags stored on the control units. The two lists have different lengths, and R silently reuses ("recycles") the shorter condition along the longer list. So the flags can be set on the wrong controls.
-
-Together, these details have three effects:
-
-- controls of rejected pairs mostly stay in the sample;
-- some controls of good pairs are dropped;
-- some treated units get both a C1 and a C2 match.
-
-Neither detail alone reproduces the published tables; both together do.
-
 ## Results
 
-Comparisons cover the 71 cells of Tables B2–B4.
+Comparisons cover the 71 cells of Tables B1–B4; the report (Section 4) explains each row.
 
 | Source | Mean % ISB reduction | Share matched in C1 | Mean abs diff from paper | Cells > 5 points off |
 | --- | --- | --- | --- | --- |
@@ -61,13 +27,37 @@ Comparisons cover the 71 cells of Tables B2–B4.
 | Rebuild, caliper after loop only | 71.7 | 0.740 | 10.2 | 26 |
 | Rebuild, caliper after loop + flag recycling | matches the original program (mean 0.11, max 0.54) | — | 0.49 | 0 |
 
-- **Size of the change.** The corrected method gains up to 23 points in one cell (Table B4, σ²_t = 1.5, a = 0.5: 67 vs 44). It is not better everywhere: at σ²_t = 1.5, a = −1 it gives 65 vs 70.
-- **No effect.** δ0 = 1 vs 0, a caliper on the true σ_t instead of the sample SD, the a = 0 convention, and a new seed all leave results within noise. Seed-to-seed noise is at most 1.5 points per cell.
-- **Intercept.** Keep it. Appendix A's n − (p + 2) degrees of freedom imply one, and dropping it breaks the Table B2 pattern.
+## Repository layout
+
+```
+README.md          this file: the replication guide
+report/            the study
+  report.md          question, the SR08 design, materials, results, discussion, references
+  report.pdf         the same report as a PDF, built from report.md by pdf/build.sh
+  pdf/               build.sh, filter.lua, print.js, style.css (the PDF build)
+R/
+  sr08_appendixB.R   the rebuild, with switches for each variant and the full, sensitivity and variants_2009 run modes
+  run_smoke.R        quick check on a 16-setting grid
+results/sr08/      summary.md, sensitivity.md, three_way.md, and results_all.rds
+docs/              replication_verdict.md (verdict), three_way.md (paper vs original program vs rebuild),
+                   sensitivity.md (sensitivity variants)
+CITATION.cff       citation metadata
+LICENSE            MIT, for the code
+LICENSE-report     CC BY 4.0, for the report text and figures
+```
+
+`results_all.rds` holds the per-setting result tables for each variant, as one named list.
+
+## Computational requirements
+
+- **R.** Requires R 4.1 or later (the code uses the native pipe `|>`); the results here were produced with R 4.5.1. Only base R and the bundled `parallel` package are used.
+- **Runtime.** On 13 worker processes each full-grid variant took 10 to 70 minutes. The smoke test takes about a minute.
+- **Randomness.** Seeds are fixed and recorded in each run's `meta.rds`.
+- **Report PDF (optional).** pandoc 3 or later, and Node with Playwright (Chromium).
 
 ## Reproduce
 
-Requires R 4.1 or later (the code uses the native pipe `|>`); the results here were produced with R 4.5.1. Only base R and the bundled `parallel` package are used. From the repository root:
+From the repository root:
 
 ```sh
 # 1. Corrected method (reference implementation), with and without an intercept in the d model
@@ -97,29 +87,22 @@ sr08_run(g, a0 = "linear")                                  #    a = 0 conventio
 sr08_run(g, order = "high_low")                             #    treated matched largest X first
 ```
 
-`sr08_run()` is serial; the `Rscript` modes run settings in parallel with `sr08_run_par()` on all cores but one and resume from per-setting checkpoints. On 13 worker processes each full-grid variant took 10 to 70 minutes. Seeds are fixed and recorded in each run's `meta.rds`. Per-setting checkpoints (`results/sr08/<variant>/setting_XXXX.rds`) are not tracked; the per-setting result tables (`results/sr08/results_all.rds`, one named data frame per variant, one row per setting) and the Markdown summaries are. To load the results:
+`sr08_run()` is serial; the `Rscript` modes run settings in parallel with `sr08_run_par()` on all cores but one and resume from per-setting checkpoints. Per-setting checkpoints (`results/sr08/<variant>/setting_XXXX.rds`) are not tracked; the per-setting result tables (`results/sr08/results_all.rds`, one named data frame per variant, one row per setting) and the Markdown summaries are. To load the results:
 
 ```r
 res <- readRDS("results/sr08/results_all.rds")   # names(res): results_intercept_TRUE, results_sens_seed_2009, ...
 mean(res$results_intercept_TRUE$pct_red)          # corrected method, mean % ISB reduction: 84.3
 ```
 
-## Files
+The column for the original 2009 program in `docs/three_way.md` comes from a 2026 run of that program, which is not included here, so it cannot be regenerated from this repository.
 
-| Path | Contents |
-| --- | --- |
-| `R/sr08_appendixB.R` | The rebuild, with switches for each variant and the `full`, `sensitivity` and `variants_2009` run modes |
-| `R/run_smoke.R` | Quick check on a 16-setting grid |
-| `results/sr08/` | `summary.md`, `sensitivity.md`, `three_way.md`, and `results_all.rds` (per-setting result tables for each variant, as one named list) |
-| `docs/` | `replication_verdict.md` (verdict), `three_way.md` (paper vs original program vs rebuild), `sensitivity.md` (sensitivity variants) |
+### Build the report PDF
 
-## Lesson
+```sh
+bash report/pdf/build.sh
+```
 
-A shorter logical vector used to index a longer one is silently recycled in R. A one-line check such as `stopifnot(length(flag) == length(x))` would have caught this. An independent rebuild with a switch for each suspected difference isolated the cause quickly.
-
-## Conclusions
-
-The local/non-local matching method of Stuart and Rubin (2008) stands. Implemented as Appendix A describes, it removes more bias than the published simulation shows (84.3% vs 80.6% on average), so the published tables understate its advantage. The gap came from two small bookkeeping details in the 2009 program, not from the method. More generally, an independent rebuild from a paper’s text, with a switch for each suspected difference, is an effective way to check a published simulation, and a one-line length check would have caught this issue.
+pandoc writes a standalone HTML page from `report/report.md`, and Chromium (Playwright) prints it to `report/report.pdf`. Relative links in the PDF point to the files on GitHub at the release tag for the version in `CITATION.cff` (set `REF` to use another ref).
 
 ## Acknowledgment
 
@@ -131,8 +114,12 @@ Code, documentation and analyses were developed with Claude (Anthropic) as a cod
 
 ## How to cite
 
-Wang, Q. (2026). *Matching with local and non-local control groups: An R rebuild of Stuart and Rubin’s (2008) simulation* (Version 1.0) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.24186061
+Use the metadata in [CITATION.cff](CITATION.cff) (GitHub's "Cite this repository" button), and please also cite Stuart and Rubin (2008).
+
+> Wang, Q. (2026). *Matching with local and non-local control groups: An R rebuild of Stuart and Rubin’s (2008) simulation* (Version 1.1.0) [Computer software and report]. Zenodo. https://doi.org/10.5281/zenodo.24186061
+
+> Stuart, E. A., & Rubin, D. B. (2008). Matching with multiple control groups with adjustment for group differences. *Journal of Educational and Behavioral Statistics, 33*(3), 279–306. https://doi.org/10.3102/1076998607306078
 
 ## License
 
-MIT (see `LICENSE`).
+Code: MIT ([LICENSE](LICENSE)). Report text and figures: CC BY 4.0 ([LICENSE-report](LICENSE-report)).

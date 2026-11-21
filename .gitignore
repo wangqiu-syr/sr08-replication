@@ -16,3 +16,6 @@ private/
 .Rproj.user/
 # Claude Code local settings
 .claude/
+# Copyrighted papers; the report (CC BY 4.0) is built by report/pdf/build.sh
+*.pdf
+!report/report.pdf

@@ -25,7 +25,7 @@ Comparisons cover the 71 cells of Tables B1–B4; the report (Section 4) explain
 | Original 2009 program, run in 2026 | 80.9 | 0.738 | 0.5 | 0 |
 | Rebuild, corrected (caliper inside loop) | 84.3 | 0.819 | 4.0 | 16 |
 | Rebuild, caliper after loop only | 71.7 | 0.740 | 10.2 | 26 |
-| Rebuild, caliper after loop + flag recycling | matches the original program (mean 0.11, max 0.54) | — | 0.49 | 0 |
+| Rebuild, caliper after loop + flag update | matches the original program (mean 0.11, max 0.54) | — | 0.49 | 0 |
 
 ## Repository layout
 

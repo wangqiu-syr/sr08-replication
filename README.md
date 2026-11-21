@@ -34,10 +34,12 @@ README.md          this file: the replication guide
 report/            the study
   report.md          question, the SR08 design, materials, results, discussion, references
   report.pdf         the same report as a PDF, built from report.md by pdf/build.sh
+  figures/           Figures 1–3 (PNG, 300 dpi), drawn by R/report_figures.R
   pdf/               build.sh, filter.lua, print.js, style.css (the PDF build), and README.md (how report.pdf was built)
 R/
   sr08_appendixB.R   the rebuild, with switches for each variant and the full, sensitivity and variants_2009 run modes
   run_smoke.R        quick check on a 16-setting grid
+  report_figures.R   Figures 1–3 of the report, from results_all.rds and docs/three_way.md
 results/sr08/      summary.md, sensitivity.md, three_way.md, and results_all.rds
 docs/              replication_verdict.md (verdict), three_way.md (paper vs original program vs rebuild),
                    sensitivity.md (sensitivity variants)
@@ -67,6 +69,8 @@ Rscript R/sr08_appendixB.R full            # -> results/sr08/intercept_TRUE, int
 Rscript R/sr08_appendixB.R sensitivity     # -> results/sr08/sens_*, sensitivity.md
 # 3. Caliper after the loop + flag recycling (reproduces the published tables), and d0 = 1
 Rscript R/sr08_appendixB.R variants_2009   # -> results/sr08/sens_caliper_after_recycle, sens_d0_1
+# 5. Figures 1–3 of the report, from the results above (seconds; no simulation)
+Rscript R/report_figures.R                 # -> report/figures/*.png
 # Quick check on 16 settings, 2 replications (about a minute)
 Rscript R/run_smoke.R
 ```

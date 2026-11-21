@@ -410,6 +410,8 @@ sr08_sensitivity_md <- function(res, file, note = character()) {
 #                                         caliper_after_loop, seed_2009), then
 #                                         results/sr08/sensitivity.md
 #   Rscript R/sr08_appendixB.R variants_2009 -> d0_1 and caliper_after_recycle
+#   Rscript R/sr08_appendixB.R noise_2009 -> caliper_after_recycle with seed 2009 (its own
+#                                         seed-to-seed noise)
 # Rerunning any command resumes from the checkpoints on disk.
 if (sys.nframe() == 0) {
   mode <- commandArgs(TRUE); mode <- if (length(mode)) mode[1] else "full"
@@ -507,5 +509,14 @@ if (sys.nframe() == 0) {
       if (!is.null(r)) sr08_save_result(dir, paste0("results_sens_", v), r)
     }
     sr08_log(log, "VARIANTS_2009 DONE")
-  } else stop("usage: Rscript R/sr08_appendixB.R [pilot|full|sensitivity|variants_2009]")
+  } else if (mode == "noise_2009") {
+    # Seed-to-seed noise of caliper_after_recycle itself, so that its difference from the
+    # original 2009 program is compared with the noise of the same variant.
+    dir <- file.path(root, "results", "sr08"); log <- file.path(dir, "progress.log")
+    sr08_log(log, "noise_2009 run: pid ", Sys.getpid(), ", ", workers, " workers")
+    r <- sr08_run_par(out_dir = file.path(dir, "sens_caliper_after_recycle_seed_2009"), log_file = log,
+                      workers = workers, caliper_when = "after", recycle_flags = TRUE, seed = 2009)
+    sr08_save_result(dir, "results_sens_caliper_after_recycle_seed_2009", r)
+    sr08_log(log, "NOISE_2009 DONE")
+  } else stop("usage: Rscript R/sr08_appendixB.R [pilot|full|sensitivity|variants_2009|noise_2009]")
 }

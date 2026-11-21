@@ -69,6 +69,8 @@ Rscript R/sr08_appendixB.R full            # -> results/sr08/intercept_TRUE, int
 Rscript R/sr08_appendixB.R sensitivity     # -> results/sr08/sens_*, sensitivity.md
 # 3. Caliper after the loop + flag update (reproduces the published tables), and d0 = 1
 Rscript R/sr08_appendixB.R variants_2009   # -> results/sr08/sens_caliper_after_recycle, sens_d0_1
+#    and the same variant with seed 2009 (its own seed-to-seed noise)
+Rscript R/sr08_appendixB.R noise_2009      # -> results/sr08/sens_caliper_after_recycle_seed_2009
 # 5. Figures 1–3 of the report, from the results above (seconds; no simulation)
 Rscript R/report_figures.R                 # -> report/figures/*.png
 # Quick check on 16 settings, 2 replications (about a minute)

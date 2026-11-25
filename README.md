@@ -122,11 +122,11 @@ Code, documentation and analyses were developed with Claude (Anthropic) as a cod
 
 ## How to cite
 
-To cite the report, cite the EdArXiv preprint:
+To cite the report, cite the EdArXiv preprint (the `preferred-citation` in [CITATION.cff](CITATION.cff), which GitHub's "Cite this repository" button shows):
 
 > Wang, Q. (2026). *Matching with local and non-local control groups: An R rebuild of Stuart and Rubin’s (2008) simulation*. EdArXiv. https://doi.org/10.35542/osf.io/ehmcu
 
-To cite the code, use the metadata in [CITATION.cff](CITATION.cff) (GitHub's "Cite this repository" button). The DOI is Zenodo's concept DOI, which always resolves to the latest version.
+To cite the code, cite the software release on Zenodo (the top-level metadata in CITATION.cff). The DOI is Zenodo's concept DOI, which always resolves to the latest version.
 
 > Wang, Q. (2026). *Matching with local and non-local control groups: An R rebuild of Stuart and Rubin’s (2008) simulation* (Version 1.1.0) [Computer software and report]. Zenodo. https://doi.org/10.5281/zenodo.24186060
 

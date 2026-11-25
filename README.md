@@ -2,6 +2,8 @@
 
 Qiu Wang, Syracuse University · Version 1.1.0 · November 2026 · **[Read the report](report/report.md)** ([PDF](report/report.pdf))
 
+Preprint: Wang, Q. (2026). *Matching with local and non-local control groups: An R rebuild of Stuart and Rubin’s (2008) simulation*. EdArXiv. https://doi.org/10.35542/osf.io/ehmcu
+
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24186060.svg)](https://doi.org/10.5281/zenodo.24186060)
 
 This repository is the replication package for the report. The study itself, with the question, the SR08 design, the materials, the results and the discussion, is in [report/report.md](report/report.md). This README says how to reproduce every number in it.
@@ -120,9 +122,15 @@ Code, documentation and analyses were developed with Claude (Anthropic) as a cod
 
 ## How to cite
 
-Use the metadata in [CITATION.cff](CITATION.cff) (GitHub's "Cite this repository" button), and please also cite Stuart and Rubin (2008). The DOI is Zenodo's concept DOI, which always resolves to the latest version.
+To cite the report, cite the EdArXiv preprint:
+
+> Wang, Q. (2026). *Matching with local and non-local control groups: An R rebuild of Stuart and Rubin’s (2008) simulation*. EdArXiv. https://doi.org/10.35542/osf.io/ehmcu
+
+To cite the code, use the metadata in [CITATION.cff](CITATION.cff) (GitHub's "Cite this repository" button). The DOI is Zenodo's concept DOI, which always resolves to the latest version.
 
 > Wang, Q. (2026). *Matching with local and non-local control groups: An R rebuild of Stuart and Rubin’s (2008) simulation* (Version 1.1.0) [Computer software and report]. Zenodo. https://doi.org/10.5281/zenodo.24186060
+
+Please also cite Stuart and Rubin (2008):
 
 > Stuart, E. A., & Rubin, D. B. (2008). Matching with multiple control groups with adjustment for group differences. *Journal of Educational and Behavioral Statistics, 33*(3), 279–306. https://doi.org/10.3102/1076998607306078
 
